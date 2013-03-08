@@ -18,11 +18,22 @@ from reposadolib import reposadocommon
 from functools import wraps
 
 # Basic auth implementation modeled directly after guide at
-# http://flask.pocoo.org/snippets/8
+# http://flask.pocoo.org/snippets/8. Modified to allow for 
+# multiple usernames and password
 def check_auth(username, password):
-	'''Check if a username / password combination is valid.'''
-	return username == 'REPLACE_ME_WITH_USERNAME' and password == 'REPLACE_ME_WITH_PASSWORD'
-
+    '''Check if a username / password combination is valid.'''
+    allowed_users = {'user1':'password1', 
+                     'user2':'password2'}
+        
+    if allowed_users.has_key(username):
+        if allowed_users[username] == password:
+            # User exists and password is correct
+            return True
+        else:
+            return False
+    else:
+        return False
+    
 def authenticate():
 	return Response("Couldn't verify your user/pass.", 401, {'WWW-Authenticate': 'Basic realm="Login required"'})
 
