@@ -204,11 +204,17 @@ function refresh_updates_rows() {
 	    var text = '<tr><td>';
 
 	    // main informational columns
-	    text += product['title'];
+	    text += '<a href="#!" title="' + product['id'] + '" data-toggle="modal" data-target="#' + product['id'] + '">' + product['title'] + '</a>';
 
 	    if (product['depr'] == true) {
 	        text += ' <span class="label label-warning">Deprecated</span>';
 	    }
+
+		text += '<div id="' + product['id'] + '" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="' + product['id'] + '" aria-hidden="true">';
+		text += '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>' + product['title'] + '</h3></div>';
+  		text += '<div class="modal-body" id="' + product['id'] + '-desc"></div>';
+  		text += '<div class="modal-footer"><button class="btn" data-dismiss="modal" aria-hidden="true">Close</button></div>';
+  		text += '</div>';
 
 	    text += '</td><td>' +
 		product['version'] + '</td><td>' +
@@ -257,6 +263,16 @@ function refresh_updates_rows() {
 	    }
 	});
 	$("#swupdates").append(allrowtext);
+
+	// On demand cause the HTML description to be parsed and displayed.
+	$.each(products['result'], function(row, product) {
+		$('#' + product['id']).on('show', function () {
+				var descriptions = $( product['description'] );
+				var desc_obj = $( descriptions.filter('p, ul, ol').get() );
+				$( '#' + product['id'] + '-desc' ).html(desc_obj);
+				$( '#' + product['id'] + '-desc' ).append('<p><b>Product ID: </b>' + product['id'] + '</p>');
+		});
+	});
 
 	// assign hover events for the new buttons
 	$('button.unlisted').hover(

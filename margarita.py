@@ -31,11 +31,12 @@ def products():
 	for prodid in products.keys():
 		if 'title' in products[prodid] and 'version' in products[prodid] and 'PostDate' in products[prodid]:
 			prodlist.append({
-			    'title':    products[prodid]['title'],
-			    'version':  products[prodid]['version'],
-			    'PostDate': products[prodid]['PostDate'].strftime('%Y-%m-%d'),
-			    'id':       prodid,
-			    'depr':     len(products[prodid].get('AppleCatalogs', [])) < 1,
+			    'title':        products[prodid]['title'],
+			    'version':      products[prodid]['version'],
+			    'description':  products[prodid]['description'],
+			    'PostDate':     products[prodid]['PostDate'].strftime('%Y-%m-%d'),
+			    'id':           prodid,
+			    'depr':         len(products[prodid].get('AppleCatalogs', [])) < 1,
 			    })
 		else:
 			print 'Invalid update!'
